@@ -62,7 +62,41 @@
                     </p:selectOneMenu>
                 </div>
             </div>
+            <div class="fildset-endereco">
+                <p:fieldset legend="Endereço">
 
+                    <div class="busca-rua">
+                        <p:outputLabel for="input-rua" value="Rua:"/>
+                        <p:inputText id="input-rua" value="#{estudanteCadastroWebBean.estudanteDTO.enderecoDTO.rua}"/>
+                    </div>
+
+                    <div class="busca-numero">
+                        <p:outputLabel for="input-numero" value="Número:"/>
+                        <p:inputText id="input-numero" value="#{estudanteCadastroWebBean.estudanteDTO.enderecoDTO.numero}"/>
+                    </div>
+
+                    <div class="busca-bairro">
+                        <p:outputLabel for="input-bairro" value="Bairro:"/>
+                        <p:inputText id="input-bairro" value="#{estudanteCadastroWebBean.estudanteDTO.enderecoDTO.bairro}"/>
+                    </div>
+
+                    <div class="busca-cidade">
+                        <p:outputLabel for="input-cidade" value="Cidade:"/>
+                        <p:inputText id="input-cidade" value="#{estudanteCadastroWebBean.estudanteDTO.enderecoDTO.cidade}"/>
+                    </div>
+
+                    <div class="busca-estado">
+                        <p:outputLabel for="input-estado" value="Estado:"/>
+                        <p:inputText id="input-estado" value="#{estudanteCadastroWebBean.estudanteDTO.enderecoDTO.estado}"/>
+                    </div>
+
+                    <div class="busca-pais">
+                        <p:outputLabel for="input-pais" value="País:"/>
+                        <p:inputText id="input-pais" value="#{estudanteCadastroWebBean.estudanteDTO.enderecoDTO.pais}"/>
+                    </div>
+
+                </p:fieldset>
+            </div>
             <div class="col-12">
                 <div class="col-3 m-1">
                     <p:commandButton id="botaoCadastrar"

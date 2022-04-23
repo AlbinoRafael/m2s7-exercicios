@@ -25,7 +25,8 @@ public class Turma {
     private Date dataInicio;
 
     private Date dataTermino;
-
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Escola escola;
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "turma")
     private List<Estudante> estudantes = new ArrayList<>();
 
@@ -59,6 +60,14 @@ public class Turma {
 
     public void setDataTermino(Date dataTermino) {
         this.dataTermino = dataTermino;
+    }
+
+    public Escola getEscola() {
+        return escola;
+    }
+
+    public void setEscola(Escola escola) {
+        this.escola = escola;
     }
 
     public List<Estudante> getEstudantes() {

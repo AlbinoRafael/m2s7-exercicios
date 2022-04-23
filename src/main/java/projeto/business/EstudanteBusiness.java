@@ -3,9 +3,11 @@ package projeto.business;
 import org.apache.commons.lang3.StringUtils;
 import projeto.dto.EstudanteDTO;
 import projeto.dto.TurmaDTO;
+import projeto.entity.Endereco;
 import projeto.entity.Estudante;
 import projeto.entity.Turma;
 import projeto.exception.BusinessException;
+import projeto.repository.EnderecoRepository;
 import projeto.repository.EstudanteRepository;
 
 import javax.inject.Inject;
@@ -17,6 +19,10 @@ public class EstudanteBusiness {
     @Inject
     private EstudanteRepository estudanteRepository;
 
+    @Inject
+    private EnderecoRepository enderecoRepository;
+
+    private EnderecoBusiness enderecoBusiness = new EnderecoBusiness();
     public void cadastrar(EstudanteDTO estudanteDTO) throws BusinessException {
         validarCadastrar(estudanteDTO);
         cadastrarEstudanteNoBanco(estudanteDTO);
@@ -44,6 +50,23 @@ public class EstudanteBusiness {
         }
 
         estudante.setTurma(turma);
+
+        enderecoBusiness.validarCadastrar(estudanteDTO.getEnderecoDTO());
+        Endereco endereco = new Endereco();
+        endereco.setRua(estudanteDTO.getEnderecoDTO().getRua());
+        endereco.setNumero(estudanteDTO.getEnderecoDTO().getNumero());
+        endereco.setBairro(estudanteDTO.getEnderecoDTO().getBairro());
+        endereco.setCidade(estudanteDTO.getEnderecoDTO().getCidade());
+        endereco.setEstado(estudanteDTO.getEnderecoDTO().getEstado());
+        endereco.setPais(estudanteDTO.getEnderecoDTO().getPais());
+        estudante.setEndereco(endereco);
+
+        if (endereco.getIdEndereco() != null) {
+            enderecoRepository.merge(endereco);
+        } else {
+            enderecoRepository.persist(endereco);
+            estudanteDTO.getEnderecoDTO().setIdEndereco(endereco.getIdEndereco());
+        }
 
         if (estudante.getIdEstudante() != null) {
             estudanteRepository.merge(estudante);
@@ -82,7 +105,6 @@ public class EstudanteBusiness {
         if (estudante == null) {
             throw new BusinessException("Estudante não encontrado através do ID " + idEstudante + ".");
         }
-
         return new EstudanteDTO(estudante);
     }
 }
