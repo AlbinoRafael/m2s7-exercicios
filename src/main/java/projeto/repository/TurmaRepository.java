@@ -4,6 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 import projeto.dto.EstudanteDTO;
 import projeto.dto.FiltroTurmaDTO;
 import projeto.dto.TurmaDTO;
+import projeto.entity.Estudante;
 import projeto.entity.Turma;
 
 import javax.persistence.NoResultException;

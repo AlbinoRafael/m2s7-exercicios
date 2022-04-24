@@ -1,6 +1,9 @@
 package projeto.repository;
 
 import projeto.dto.EscolaDTO;
+import projeto.dto.TurmaDTO;
+import projeto.entity.Escola;
+import projeto.entity.Turma;
 
 import javax.persistence.NoResultException;
 import java.util.ArrayList;
@@ -8,7 +11,11 @@ import java.util.List;
 
 public class EscolaRepository extends GenericRepository {
 
-    public List<EscolaDTO> consultarEscolaPorNomeOuCodigo(String query) {
+    public List<EscolaDTO> consultarEscolas() {
+        return entityManager.createQuery("SELECT new projeto.dto.EscolaDTO(e) "+
+                        "FROM Escola e ", EscolaDTO.class).getResultList();
+    }
+    public List<EscolaDTO> consultarEscolaPorCodigoOuNome(String query) {
         query = "%" + query + "%";
         query = query.toLowerCase();
         try {

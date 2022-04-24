@@ -1,1 +1,2 @@
-INSERT INTO public.turma (id_turma, datainicio, datatermino, nome) VALUES (5000, now(), now(), 'DevinHouse'), (5001, now(), now(), 'TechDive'), (5002, now(), now(), 'Turma Experimental mt doida')
+INSERT INTO public.turma (id_turma, datainicio, datatermino, nome) VALUES (5000, now(), now(), 'DevinHouse'), (5001, now(), now(), 'TechDive'), (5002, now(), now(), 'Turma Experimental mt doida');
+INSERT INTO public.escola(id_escola, datacriacao, nome, endereco_id_endereco) VALUES (3000, now(), 'E.E.B Imaculado', 10), (3001, now(), 'E.E.B Ilhota', 10), (3002, now(), 'E.E.B Pedrinhas', 10);

@@ -52,7 +52,22 @@
                                         value="#{turmaCadastroWebBean.turmaDTO.dataTermino}"/>
                         </div>
                     </div>
-
+                    <div class="col-12">
+                        <div class="col-2">
+                            <p:outputLabel for="escola" value="Escola: "/>
+                            <p:selectOneMenu id="escola"
+                                             converter="omnifaces.SelectItemsConverter"
+                                             value="#{turmaCadastroWebBean.turmaDTO.idEscola}">
+                                <f:selectItem itemLabel="Selecione" itemValue="#{null}"/>
+                                <f:selectItems value="#{turmaCadastroWebBean.escolas}"
+                                               var="escola"
+                                               itemLabel="#{escola.nome}"
+                                               itemValue="#{escola.idEscola}"/>
+                                <p:ajax process="@this"
+                                        update="escola"/>
+                            </p:selectOneMenu>
+                        </div>
+                    </div>
                     <div class="col-12">
                         <div class="col-3 m-1">
                             <p:commandButton id="botaoCadastrar"
@@ -84,7 +99,7 @@
                                      process="@this"
                                      disabled="#{turmaCadastroWebBean.desabilitarAdicionarEstudante()}"
                                      action="#{turmaCadastroWebBean.adicionarEstudante()}"
-                                     update="tabelaEstudantes, adicionarEstudante, listaEstudantes"/>
+                                     update="tabelaEstudantes,adicionarEstudante, listaEstudantes"/>
 
                     <div class="col-12">
                         <p:dataTable id="tabelaEstudantes"

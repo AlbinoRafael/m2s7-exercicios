@@ -3,13 +3,14 @@ package projeto.bean;
 import org.omnifaces.cdi.Param;
 import org.omnifaces.cdi.ViewScoped;
 import org.omnifaces.util.Faces;
+import projeto.dto.EscolaDTO;
 import projeto.dto.EstudanteDTO;
 import projeto.dto.TurmaDTO;
 import projeto.exception.BusinessException;
+import projeto.service.EscolaService;
 import projeto.service.TurmaService;
 import projeto.utils.MessageUtils;
 
-import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
@@ -26,6 +27,8 @@ public class TurmaCadastroWebBean implements Serializable {
     @Inject
     private TurmaService turmaService;
 
+    @Inject
+    private EscolaService escolaService;
     @Param(name = "idTurma")
     private Long idTurma;
 
@@ -33,7 +36,11 @@ public class TurmaCadastroWebBean implements Serializable {
 
     private EstudanteDTO estudanteSelecionado;
 
+    private EscolaDTO escolaSelecionada;
+
     private List<EstudanteDTO> estudantesSemTurmas = new ArrayList<>();
+
+    private List<EscolaDTO> escolas = new ArrayList<>();
 
     public void inicializar() {
         if (idTurma != null) {
@@ -46,6 +53,7 @@ public class TurmaCadastroWebBean implements Serializable {
             }
         }
         estudantesSemTurmas = turmaService.consultarEstudantesSemTurmas();
+        escolas = escolaService.consultarEscolas();
     }
 
     public void cadastrar() {
@@ -63,7 +71,6 @@ public class TurmaCadastroWebBean implements Serializable {
             MessageUtils.returnMessageOnFail("Ocorreu um erro ao salvar a turma. Por favor, entre em contato com o suporte.");
         }
     }
-
     public void adicionarEstudante() {
         turmaDTO.getEstudantes().add(estudanteSelecionado);
         turmaDTO.getEstudantes().sort(Comparator.comparing(EstudanteDTO::getNome));
@@ -85,6 +92,22 @@ public class TurmaCadastroWebBean implements Serializable {
 
     public void setTurmaDTO(TurmaDTO turmaDTO) {
         this.turmaDTO = turmaDTO;
+    }
+
+    public EscolaDTO getEscolaSelecionada() {
+        return escolaSelecionada;
+    }
+
+    public void setEscolaSelecionada(EscolaDTO escolaSelecionada) {
+        this.escolaSelecionada = escolaSelecionada;
+    }
+
+    public List<EscolaDTO> getEscolas() {
+        return escolas;
+    }
+
+    public void setEscolas(List<EscolaDTO> escolas) {
+        this.escolas = escolas;
     }
 
     public EstudanteDTO getEstudanteSelecionado() {

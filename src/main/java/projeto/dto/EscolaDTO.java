@@ -6,8 +6,10 @@ import projeto.entity.Turma;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class EscolaDTO implements Serializable {
 
@@ -17,26 +19,30 @@ public class EscolaDTO implements Serializable {
 
     private String nome;
 
-    private Endereco endereco;
+    private EnderecoDTO enderecoDTO = new EnderecoDTO();
 
     private Date dataCriacao;
 
-    List<Turma> turmas = new ArrayList<>();
+    List<TurmaDTO> turmas = new ArrayList<>();
 
     public EscolaDTO(){}
 
-    public EscolaDTO(Long idEscola, String nome, Endereco endereco, Date dataCriacao) {
+    public EscolaDTO(Long idEscola, String nome, Date dataCriacao) {
         this.idEscola = idEscola;
         this.nome = nome;
-        this.endereco = endereco;
         this.dataCriacao = dataCriacao;
     }
 
     public EscolaDTO(Escola escola){
         this.idEscola = escola.getIdEscola();
         this.nome = escola.getNome();
-        this.endereco = escola.getEndereco();
+        this.enderecoDTO = new EnderecoDTO(escola.getEndereco());
         this.dataCriacao = escola.getDataCriacao();
+        this.turmas = escola.getTurmas()
+                .stream()
+                .map(TurmaDTO::new)
+                .sorted(Comparator.comparing(TurmaDTO::getNome))
+                .collect(Collectors.toList());
     }
 
     public Long getIdEscola() {
@@ -55,12 +61,12 @@ public class EscolaDTO implements Serializable {
         this.nome = nome;
     }
 
-    public Endereco getEndereco() {
-        return endereco;
+    public EnderecoDTO getEnderecoDTO() {
+        return enderecoDTO;
     }
 
-    public void setEndereco(Endereco endereco) {
-        this.endereco = endereco;
+    public void setEnderecoDTO(EnderecoDTO enderecoDTO) {
+        this.enderecoDTO = enderecoDTO;
     }
 
     public Date getDataCriacao() {
@@ -71,11 +77,12 @@ public class EscolaDTO implements Serializable {
         this.dataCriacao = dataCriacao;
     }
 
-    public List<Turma> getTurmas() {
+    public List<TurmaDTO> getTurmas() {
         return turmas;
     }
 
-    public void setTurmas(List<Turma> turmas) {
+    public void setTurmas(List<TurmaDTO> turmas) {
         this.turmas = turmas;
     }
+
 }

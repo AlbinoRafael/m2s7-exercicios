@@ -15,6 +15,8 @@ public class TurmaDTO implements Serializable {
 
     private Long idTurma;
 
+    private Long idEscola;
+
     private String nome;
 
     private Date dataInicio;
@@ -37,6 +39,7 @@ public class TurmaDTO implements Serializable {
 
     public TurmaDTO(Turma turma) {
         this.idTurma = turma.getIdTurma();
+        this.idEscola = turma.getEscola() != null ? turma.getEscola().getIdEscola():null;
         this.nome = turma.getNome();
         this.dataInicio = turma.getDataInicio();
         this.dataTermino = turma.getDataTermino();
@@ -63,6 +66,14 @@ public class TurmaDTO implements Serializable {
 
     public void setIdTurma(Long idTurma) {
         this.idTurma = idTurma;
+    }
+
+    public Long getIdEscola() {
+        return idEscola;
+    }
+
+    public void setIdEscola(Long idEscola) {
+        this.idEscola = idEscola;
     }
 
     public String getNome() {
