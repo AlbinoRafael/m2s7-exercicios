@@ -10,7 +10,7 @@
       lang="en">
 
 <h:head>
-    <title>Cadastro de estudante</title>
+    <title>Cadastro de escola</title>
     <link rel="stylesheet" href="https://unpkg.com/primeflex@3.1.0/primeflex.css"/>
 </h:head>
 
@@ -20,7 +20,7 @@
         <f:viewAction action="#{escolaCadastroWebBean.inicializar()}"/>
     </f:metadata>
 
-    <h:form id="cadastroEstudante">
+    <h:form id="cadastroEscola">
         <p:messages id="messages" showDetail="true" showIcon="false" showSummary="false" closable="true">
             <p:autoUpdate/>
         </p:messages>
@@ -28,81 +28,73 @@
         <div class="grid">
             <div class="col-12">
                 <div class="col-2">
-                    <p:outputLabel for="nomeEstudante" value="Nome do estudante: "/>
-                    <p:inputText id="nomeEstudante" value="#{estudanteCadastroWebBean.estudanteDTO.nome}"/>
+                    <p:outputLabel for="nomeEscola" value="Nome da escola: "/>
+                    <p:inputText id="nomeEscola" value="#{escolaCadastroWebBean.escolaDTO.nome}"/>
                 </div>
             </div>
 
-            <div class="col-12">
-                <div class="col-2">
-                    <p:outputLabel for="dataNascimento" value="Data de nascimento: "/>
-                    <p:calendar id="dataNascimento"
-                                pattern="dd/MM/yyyy"
-                                value="#{estudanteCadastroWebBean.estudanteDTO.dataNascimento}"/>
-                </div>
-            </div>
-
-            <div class="col-12">
-                <div class="col-2">
-                    <p:outputLabel for="email" value="E-mail: "/>
-                    <p:inputText id="email" value="#{estudanteCadastroWebBean.estudanteDTO.email}"/>
-                </div>
-            </div>
-
-            <div class="col-12">
-                <div class="col-2">
-                    <p:outputLabel for="turma" value="Turma: "/>
-                    <p:selectOneMenu id="turma" value="#{estudanteCadastroWebBean.estudanteDTO.idTurma}">
-                        <f:selectItem itemLabel="Selecione" itemValue="#{null}"/>
-                        <f:selectItems value="#{estudanteCadastroWebBean.turmas}"
-                                       var="turma"
-                                       itemLabel="#{turma.nome}"
-                                       itemValue="#{turma.idTurma}"
-                        />
-                    </p:selectOneMenu>
-                </div>
-            </div>
             <div class="fildset-endereco">
                 <p:fieldset legend="Endereço">
 
                     <div class="busca-rua">
                         <p:outputLabel for="input-rua" value="Rua:"/>
-                        <p:inputText id="input-rua" value="#{estudanteCadastroWebBean.estudanteDTO.enderecoDTO.rua}"/>
+                        <p:inputText id="input-rua" value="#{escolaCadastroWebBean.escolaDTO.enderecoDTO.rua}"/>
                     </div>
 
                     <div class="busca-numero">
                         <p:outputLabel for="input-numero" value="Número:"/>
-                        <p:inputText id="input-numero" value="#{estudanteCadastroWebBean.estudanteDTO.enderecoDTO.numero}"/>
+                        <p:inputText id="input-numero" value="#{escolaCadastroWebBean.escolaDTO.enderecoDTO.numero}"/>
                     </div>
 
                     <div class="busca-bairro">
                         <p:outputLabel for="input-bairro" value="Bairro:"/>
-                        <p:inputText id="input-bairro" value="#{estudanteCadastroWebBean.estudanteDTO.enderecoDTO.bairro}"/>
+                        <p:inputText id="input-bairro" value="#{escolaCadastroWebBean.escolaDTO.enderecoDTO.bairro}"/>
                     </div>
 
                     <div class="busca-cidade">
                         <p:outputLabel for="input-cidade" value="Cidade:"/>
-                        <p:inputText id="input-cidade" value="#{estudanteCadastroWebBean.estudanteDTO.enderecoDTO.cidade}"/>
+                        <p:inputText id="input-cidade" value="#{escolaCadastroWebBean.escolaDTO.enderecoDTO.cidade}"/>
                     </div>
 
                     <div class="busca-estado">
                         <p:outputLabel for="input-estado" value="Estado:"/>
-                        <p:inputText id="input-estado" value="#{estudanteCadastroWebBean.estudanteDTO.enderecoDTO.estado}"/>
+                        <p:inputText id="input-estado" value="#{escolaCadastroWebBean.escolaDTO.enderecoDTO.estado}"/>
                     </div>
 
                     <div class="busca-pais">
                         <p:outputLabel for="input-pais" value="País:"/>
-                        <p:inputText id="input-pais" value="#{estudanteCadastroWebBean.estudanteDTO.enderecoDTO.pais}"/>
+                        <p:inputText id="input-pais" value="#{escolaCadastroWebBean.escolaDTO.enderecoDTO.pais}"/>
                     </div>
 
                 </p:fieldset>
+
+                <div class="col-12">
+                    <div class="col-2">
+                        <p:outputLabel for="dataCriacao" value="Data de criação: "/>
+                        <p:calendar id="dataCriacao"
+                                    pattern="dd/MM/yyyy"
+                                    value="#{escolaCadastroWebBean.escolaDTO.dataCriacao}"/>
+                    </div>
+                </div>
+                <p:outputLabel value="Turmas sem escola: "/>
+                <p:selectManyMenu id="advanced"
+                                  value="#{escolaCadastroWebBean.turmasSelecionadas}"
+                                  filter="true"
+                                  filterMatchMode="contains"
+                                  showCheckbox="true">
+                    <f:selectItems value="#{escolaCadastroWebBean.turmas}"
+                                   var="turma"
+                                   itemValue="#{turma.idTurma}"
+                                   itemLabel="#{turma.nome}"/>
+                </p:selectManyMenu>
+
             </div>
             <div class="col-12">
                 <div class="col-3 m-1">
                     <p:commandButton id="botaoCadastrar"
                                      process="@form"
                                      value="Cadastrar"
-                                     action="#{estudanteCadastroWebBean.cadastrar()}"/>
+                                     action="#{escolaCadastroWebBean.cadastrar()}"/>
                 </div>
             </div>
         </div>

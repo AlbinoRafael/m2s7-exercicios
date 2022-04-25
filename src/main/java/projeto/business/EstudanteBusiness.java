@@ -2,7 +2,6 @@ package projeto.business;
 
 import org.apache.commons.lang3.StringUtils;
 import projeto.dto.EstudanteDTO;
-import projeto.dto.TurmaDTO;
 import projeto.entity.Endereco;
 import projeto.entity.Estudante;
 import projeto.entity.Turma;

@@ -18,8 +18,8 @@ public class EscolaService {
     @Inject
     private EscolaRepository escolaRepository;
 
-    public void cadastrar(EscolaDTO EscolaDTO) throws BusinessException {
-        escolaBusiness.cadastrar(EscolaDTO);
+    public void cadastrar(EscolaDTO escolaDTO) throws BusinessException {
+        escolaBusiness.cadastrar(escolaDTO);
     }
 
     public List<EscolaDTO> consultarEscolas(){

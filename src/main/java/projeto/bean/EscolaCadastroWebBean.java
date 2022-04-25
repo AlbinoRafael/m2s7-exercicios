@@ -3,10 +3,12 @@ package projeto.bean;
 import org.omnifaces.cdi.Param;
 import org.omnifaces.cdi.ViewScoped;
 import org.omnifaces.util.Faces;
+import projeto.dto.EscolaDTO;
+import projeto.dto.EscolaDTO;
 import projeto.dto.EstudanteDTO;
 import projeto.dto.TurmaDTO;
 import projeto.exception.BusinessException;
-import projeto.service.EstudanteService;
+import projeto.service.EscolaService;
 import projeto.service.TurmaService;
 import projeto.utils.MessageUtils;
 
@@ -17,58 +19,70 @@ import java.util.ArrayList;
 import java.util.List;
 
 @ViewScoped
-@Named("estudanteCadastroWebBean")
+@Named("escolaCadastroWebBean")
 public class EscolaCadastroWebBean implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    private EstudanteDTO estudanteDTO = new EstudanteDTO();
+    private EscolaDTO escolaDTO = new EscolaDTO();
 
-    private List<TurmaDTO> turmas = new ArrayList<>();
-
-    @Param(name = "idEstudante")
-    private Long idEstudante;
+    @Param(name = "idEscola")
+    private Long idEscola;
 
     @Inject
-    private EstudanteService estudanteService;
+    private EscolaService escolaService;
 
     @Inject
     private TurmaService turmaService;
 
+    private List<TurmaDTO> turmas = new ArrayList<>();
+
+    private List<Long> turmasSelecionadas = new ArrayList<>();
+
     public void inicializar() {
-        if (idEstudante != null) {
+        if (idEscola != null) {
             try {
-                estudanteDTO = estudanteService.consultarDadosEstudante(idEstudante);
+                escolaDTO = escolaService.consultarDadosEscola(idEscola);
                 MessageUtils.limparMensagens();
             } catch (BusinessException e) {
                 MessageUtils.returnGlobalMessageOnFail(e.getErros());
-                Faces.redirect("/estudante.xhtml");
+                Faces.redirect("/escola.xhtml");
             }
         }
-        turmas = turmaService.consultarTurmas();
+        turmas = turmaService.consultarTurmasSemEscola();
+        System.out.println("caiu aqui");
     }
 
     public void cadastrar() {
         try {
-            estudanteService.cadastrar(estudanteDTO);
-            if (idEstudante == null) {
+            escolaDTO.setTurmas(turmasSelecionadas);
+            escolaService.cadastrar(escolaDTO);
+            if (idEscola == null) {
                 MessageUtils.returnGlobalMessageOnSuccess("Salvo com sucesso!");
-                Faces.redirect("/estudante.xhtml?idEstudante=" + estudanteDTO.getIdEstudante());
+                Faces.redirect("/escola.xhtml?idEscola=" + escolaDTO.getIdEscola());
             } else {
                 MessageUtils.returnMessageOnSuccess("Salvo com sucesso!");
             }
         } catch (BusinessException e) {
             MessageUtils.returnMessageOnFail(e.getErros());
         } catch (Exception e) {
-            MessageUtils.returnMessageOnFail("Ocorreu um erro ao salvar o estudante. Por favor, entre em contato com o suporte.");
+            MessageUtils.returnMessageOnFail("Ocorreu um erro ao salvar a escola. Por favor, entre em contato com o suporte.");
         }
     }
 
-    public EstudanteDTO getEstudanteDTO() {
-        return estudanteDTO;
+    public EscolaDTO getEscolaDTO() {
+        return escolaDTO;
     }
 
-    public void setEstudanteDTO(EstudanteDTO estudanteDTO) {
-        this.estudanteDTO = estudanteDTO;
+    public void setEscolaDTO(EscolaDTO escolaDTO) {
+        this.escolaDTO = escolaDTO;
+    }
+
+    public Long getIdEscola() {
+        return idEscola;
+    }
+
+    public void setIdEscola(Long idEscola) {
+        this.idEscola = idEscola;
     }
 
     public List<TurmaDTO> getTurmas() {
@@ -77,5 +91,13 @@ public class EscolaCadastroWebBean implements Serializable {
 
     public void setTurmas(List<TurmaDTO> turmas) {
         this.turmas = turmas;
+    }
+
+    public List<Long> getTurmasSelecionadas() {
+        return turmasSelecionadas;
+    }
+
+    public void setTurmasSelecionadas(List<Long> turmasSelecionadas) {
+        this.turmasSelecionadas = turmasSelecionadas;
     }
 }

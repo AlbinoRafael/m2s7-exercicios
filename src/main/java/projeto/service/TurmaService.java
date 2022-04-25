@@ -32,6 +32,10 @@ public class TurmaService {
         return turmaRepository.consultarTurmas();
     }
 
+    public List<TurmaDTO> consultarTurmasSemEscola(){
+        return turmaRepository.consultarTurmasSemEscola();
+    }
+
     public List<EstudanteDTO> consultarEstudantesSemTurmas() {
         return turmaRepository.consultarEstudantesSemTurmas();
     }

@@ -46,6 +46,7 @@ public class EscolaBusiness {
 
         enderecoBusiness.validarCadastrar(escolaDTO.getEnderecoDTO());
         Endereco endereco = new Endereco();
+        endereco.setIdEndereco(escolaDTO.getEnderecoDTO().getIdEndereco());
         endereco.setRua(escolaDTO.getEnderecoDTO().getRua());
         endereco.setNumero(escolaDTO.getEnderecoDTO().getNumero());
         endereco.setBairro(escolaDTO.getEnderecoDTO().getBairro());
@@ -57,18 +58,18 @@ public class EscolaBusiness {
         for (Turma turma: escola.getTurmas()) {
             if (escolaDTO.getTurmas()
                     .stream()
-                    .noneMatch(turmaDTO -> turmaDTO.getIdTurma().equals(turma.getIdTurma()))) {
+                    .noneMatch(idTurma -> idTurma.equals(turma.getIdTurma()))) {
                 turma.setEscola(null);
             }
         }
 
-        for (TurmaDTO turmaDTO : escolaDTO.getTurmas()) {
+        for (Long idTurma : escolaDTO.getTurmas()) {
             if (escola.getTurmas()
                     .stream()
-                    .noneMatch(turma -> turma.getIdTurma().equals(turmaDTO.getIdTurma()))) {
-                Turma turma = escolaRepository.find(Turma.class, turmaDTO.getIdTurma());
+                    .noneMatch(turma -> turma.getIdTurma().equals(idTurma))) {
+                Turma turma = escolaRepository.find(Turma.class, idTurma);
                 if (turma == null) {
-                    throw new BusinessException("Estudante não encontrado.");
+                    throw new BusinessException("Turma não encontrada.");
                 }
                 turma.setEscola(escola);
             }
@@ -98,6 +99,9 @@ public class EscolaBusiness {
         if (escolaDTO.getDataCriacao()==null) {
             erros.add("A data é inválida.");
         }
+        if(escolaDTO.getTurmas().isEmpty() && escolaDTO.getIdEscola() == null){
+            erros.add("Selecione pelo menos 1 turma");
+        }
         if (!erros.isEmpty()) {
             throw new BusinessException(erros);
         }
@@ -106,7 +110,7 @@ public class EscolaBusiness {
     public EscolaDTO consultarDadosEscola(Long idEscola) throws BusinessException {
         Escola Escola = escolaRepository.find(projeto.entity.Escola.class, idEscola);
         if (Escola == null) {
-            throw new BusinessException("Escola não encontrado através do ID " + idEscola + ".");
+            throw new BusinessException("Escola não encontrada através do ID " + idEscola + ".");
         }
 
         return new EscolaDTO(Escola);

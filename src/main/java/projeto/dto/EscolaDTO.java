@@ -23,7 +23,7 @@ public class EscolaDTO implements Serializable {
 
     private Date dataCriacao;
 
-    List<TurmaDTO> turmas = new ArrayList<>();
+    private List<Long> turmas = new ArrayList<>();
 
     public EscolaDTO(){}
 
@@ -40,8 +40,7 @@ public class EscolaDTO implements Serializable {
         this.dataCriacao = escola.getDataCriacao();
         this.turmas = escola.getTurmas()
                 .stream()
-                .map(TurmaDTO::new)
-                .sorted(Comparator.comparing(TurmaDTO::getNome))
+                .map(Turma::getIdTurma)
                 .collect(Collectors.toList());
     }
 
@@ -77,11 +76,11 @@ public class EscolaDTO implements Serializable {
         this.dataCriacao = dataCriacao;
     }
 
-    public List<TurmaDTO> getTurmas() {
+    public List<Long> getTurmas() {
         return turmas;
     }
 
-    public void setTurmas(List<TurmaDTO> turmas) {
+    public void setTurmas(List<Long> turmas) {
         this.turmas = turmas;
     }
 

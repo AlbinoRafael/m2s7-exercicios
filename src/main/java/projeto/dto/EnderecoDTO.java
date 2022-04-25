@@ -40,7 +40,7 @@ public class EnderecoDTO implements Serializable {
         this.numero = endereco.getNumero();
         this.bairro = endereco.getBairro();
         this.cidade = endereco.getCidade();
-        this.estado = endereco.getCidade();
+        this.estado = endereco.getEstado();
         this.pais = endereco.getPais();
     }
 
@@ -79,7 +79,6 @@ public class EnderecoDTO implements Serializable {
     public String getCidade() {
         return cidade;
     }
-
     public void setCidade(String cidade) {
         this.cidade = cidade;
     }
