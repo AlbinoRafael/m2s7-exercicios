@@ -1,10 +1,12 @@
 package projeto.service;
 
 import projeto.business.TurmaBusiness;
+import projeto.dto.EscolaDTO;
 import projeto.dto.EstudanteDTO;
 import projeto.dto.FiltroTurmaDTO;
 import projeto.dto.TurmaDTO;
 import projeto.exception.BusinessException;
+import projeto.repository.EscolaRepository;
 import projeto.repository.TurmaRepository;
 
 import javax.ejb.Stateless;
@@ -19,6 +21,9 @@ public class TurmaService {
 
     @Inject
     private TurmaRepository turmaRepository;
+
+    @Inject
+    private EscolaRepository escolaRepository;
 
     public void cadastrar(TurmaDTO turmaDTO) throws BusinessException {
         turmaBusiness.cadastrar(turmaDTO);
@@ -42,5 +47,9 @@ public class TurmaService {
 
     public List<TurmaDTO> buscar(FiltroTurmaDTO filtro) throws BusinessException {
         return turmaBusiness.buscar(filtro);
+    }
+
+    public List<EscolaDTO> consultarEscolasPorNome(String query) {
+        return escolaRepository.consultarEscolasPorNome(query);
     }
 }

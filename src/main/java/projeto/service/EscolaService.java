@@ -33,4 +33,8 @@ public class EscolaService {
     public List<EscolaDTO> consultarEscolaPorCodigoOuNome(String query) {
         return escolaRepository.consultarEscolaPorCodigoOuNome(query);
     }
+
+    public List<EscolaDTO> consultarEscolasPorNome(String query) {
+        return escolaRepository.consultarEscolasPorNome(query);
+    }
 }

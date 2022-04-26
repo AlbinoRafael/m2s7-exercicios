@@ -27,6 +27,15 @@ public class EscolaDTO implements Serializable {
 
     public EscolaDTO(){}
 
+    public EscolaDTO(String nome){
+        this.nome = nome;
+    }
+
+    public EscolaDTO(Long idEscola, String nome) {
+        this.idEscola = idEscola;
+        this.nome = nome;
+    }
+
     public EscolaDTO(Long idEscola, String nome, Date dataCriacao) {
         this.idEscola = idEscola;
         this.nome = nome;

@@ -11,7 +11,9 @@ public class FiltroTurmaDTO implements Serializable {
 
     private String nome;
 
-    private Long idEstudante;
+
+    private EstudanteDTO estudante;
+    private EscolaDTO escola;
 
     private Date dataInicio;
 
@@ -33,12 +35,20 @@ public class FiltroTurmaDTO implements Serializable {
         this.nome = nome;
     }
 
-    public Long getIdEstudante() {
-        return idEstudante;
+    public EscolaDTO getEscola() {
+        return escola;
     }
 
-    public void setIdEstudante(Long idEstudante) {
-        this.idEstudante = idEstudante;
+    public void setEscola(EscolaDTO escola) {
+        this.escola = escola;
+    }
+
+    public EstudanteDTO getEstudante() {
+        return estudante;
+    }
+
+    public void setEstudante(EstudanteDTO estudante) {
+        this.estudante = estudante;
     }
 
     public Date getDataInicio() {

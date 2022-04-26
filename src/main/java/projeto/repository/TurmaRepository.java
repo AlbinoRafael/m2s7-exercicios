@@ -4,7 +4,6 @@ import org.apache.commons.lang3.StringUtils;
 import projeto.dto.EstudanteDTO;
 import projeto.dto.FiltroTurmaDTO;
 import projeto.dto.TurmaDTO;
-import projeto.entity.Estudante;
 import projeto.entity.Turma;
 
 import javax.persistence.NoResultException;
@@ -21,8 +20,8 @@ public class TurmaRepository extends GenericRepository {
 
     public List<TurmaDTO> consultarTurmasSemEscola() {
         return entityManager.createQuery("SELECT new projeto.dto.TurmaDTO(t) "
-                + "FROM Turma t "
-                + "WHERE t.escola is null ",TurmaDTO.class)
+                        + "FROM Turma t "
+                        + "WHERE t.escola is null ", TurmaDTO.class)
                 .getResultList();
     }
 
@@ -49,11 +48,6 @@ public class TurmaRepository extends GenericRepository {
         if (filtro.getIdTurma() != null) {
             query.setParameter("idTurma", filtro.getIdTurma());
         }
-
-        if (filtro.getIdEstudante() != null) {
-            query.setParameter("idEstudante", filtro.getIdEstudante());
-        }
-
         if (!StringUtils.isBlank(filtro.getNome())) {
             String nome = "%" + filtro.getNome() + "%";
             nome = nome.toLowerCase();
@@ -67,6 +61,12 @@ public class TurmaRepository extends GenericRepository {
         if (filtro.getDataTermino() != null) {
             query.setParameter("dataTermino", filtro.getDataTermino());
         }
+        if (filtro.getEscola() != null) {
+            query.setParameter("idEscola", filtro.getEscola().getIdEscola());
+        }
+        if(filtro.getEstudante() != null){
+            query.setParameter("idEstudante", filtro.getEstudante().getIdEstudante());
+        }
     }
 
     private String montarSqlBuscaTurma(FiltroTurmaDTO filtro) {
@@ -74,7 +74,7 @@ public class TurmaRepository extends GenericRepository {
                 "FROM Turma t ";
         String andOrWhere = "WHERE ";
 
-        if (filtro.getIdEstudante() != null) {
+        if (filtro.getEstudante().getIdEstudante() != null) {
             hql = hql.concat("JOIN t.estudantes e ");
 
             hql = hql.concat(andOrWhere).concat("e.idEstudante = :idEstudante ");
@@ -98,10 +98,13 @@ public class TurmaRepository extends GenericRepository {
 
         if (filtro.getDataTermino() != null) {
             hql = hql.concat(andOrWhere).concat("t.dataTermino <= :dataTermino ");
+            andOrWhere = "AND ";
+        }
+
+        if (filtro.getEscola() != null) {
+            hql = hql.concat(andOrWhere).concat("t.escola.idEscola = :idEscola ");
         }
 
         return hql.concat("ORDER BY t.idTurma");
     }
-
-
 }

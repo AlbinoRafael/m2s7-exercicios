@@ -6,6 +6,7 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:p="http://primefaces.org/ui"
+      xmlns:o="http://omnifaces.org/ui"
       xml:lang="en"
       lang="en">
 
@@ -47,12 +48,13 @@
                             cache="true"
                             cacheTimeout="3000000"
                             completeMethod="#{buscaTurmaWebBean.consultarEstudantePorNomeOuMatricula}"
-                            value="#{buscaTurmaWebBean.filtro.idEstudante}"
+                            value="#{buscaTurmaWebBean.filtro.estudante}"
                             var="estudante"
-                            itemValue="#{estudante.idEstudante}"
+                            itemValue="#{estudante}"
                             itemLabel="#{estudante.nome}">
                 <p:ajax event="itemSelect" process="@this" global="false"/>
                 <p:ajax event="clear" process="@this" global="false"/>
+                <o:converter converterId="omnifaces.ListIndexConverter" list="#{buscaTurmaWebBean.estudantesEncontrados}"/>
             </p:autoComplete>
 
             <p:outputLabel value="Início: "/>
@@ -72,6 +74,25 @@
                 <p:ajax event="change" process="@this"/>
                 <p:ajax process="@this"/>
             </p:calendar>
+
+            <p:outputLabel value="Escola: "/>
+            <p:autoComplete id="autocompleteEscola"
+                            minQueryLength="3"
+                            queryDelay="1000"
+                            emptyMessage="Nenhuma escola encontrada"
+                            forceSelection="true"
+                            maxResults="15"
+                            cache="true"
+                            cacheTimeout="3000000"
+                            completeMethod="#{buscaTurmaWebBean.consultarEscolasPorNome}"
+                            value="#{buscaTurmaWebBean.filtro.escola}"
+                            var="escola"
+                            itemValue="#{escola}"
+                            itemLabel="#{escola.nome}">
+                <p:ajax event="itemSelect" process="@this" global="false"/>
+                <p:ajax event="clear" process="@this" global="false"/>
+                <o:converter converterId="omnifaces.ListIndexConverter" list="#{buscaTurmaWebBean.escolasEncontradas}"/>
+            </p:autoComplete>
 
             <p:commandButton id="buscar"
                              value="Buscar"
@@ -121,6 +142,10 @@
 
                 <p:column headerText="Status">
                     <h:outputText value="#{turma.status}"/>
+                </p:column>
+
+                <p:column headerText="Escola">
+                    <h:outputText value="#{turma.escolaDTO.nome}"/>
                 </p:column>
             </p:dataTable>
         </p:fieldset>

@@ -29,6 +29,8 @@ public class TurmaDTO implements Serializable {
 
     private String status;
 
+    private EscolaDTO escolaDTO = new EscolaDTO();
+
     public TurmaDTO() {
     }
 
@@ -39,7 +41,7 @@ public class TurmaDTO implements Serializable {
 
     public TurmaDTO(Turma turma) {
         this.idTurma = turma.getIdTurma();
-        this.idEscola = turma.getEscola() != null ? turma.getEscola().getIdEscola():null;
+        this.idEscola = turma.getEscola() != null ? turma.getEscola().getIdEscola() : null;
         this.nome = turma.getNome();
         this.dataInicio = turma.getDataInicio();
         this.dataTermino = turma.getDataTermino();
@@ -49,7 +51,7 @@ public class TurmaDTO implements Serializable {
                 .sorted(Comparator.comparing(EstudanteDTO::getNome))
                 .collect(Collectors.toList());
         this.quantidadeEstudantes = this.estudantes.size();
-
+        this.escolaDTO = turma.getEscola() != null ? new EscolaDTO(turma.getEscola()) : null;
         Date dataAtual = new Date();
         if (dataAtual.after(dataInicio) && dataAtual.before(dataTermino)) {
             this.status = "Em andamento";
@@ -124,4 +126,11 @@ public class TurmaDTO implements Serializable {
         this.status = status;
     }
 
+    public EscolaDTO getEscolaDTO() {
+        return escolaDTO;
+    }
+
+    public void setEscolaDTO(EscolaDTO escolaDTO) {
+        this.escolaDTO = escolaDTO;
+    }
 }
