@@ -2,6 +2,7 @@ package projeto.business;
 
 import org.apache.commons.lang3.StringUtils;
 import projeto.dto.EstudanteDTO;
+import projeto.dto.FiltroEstudanteDTO;
 import projeto.entity.Endereco;
 import projeto.entity.Estudante;
 import projeto.entity.Turma;
@@ -22,6 +23,12 @@ public class EstudanteBusiness {
     private EnderecoRepository enderecoRepository;
 
     private EnderecoBusiness enderecoBusiness = new EnderecoBusiness();
+
+    public List<EstudanteDTO> buscar(FiltroEstudanteDTO filtro) throws BusinessException {
+        validarCamposNulos(filtro);
+        return estudanteRepository.buscar(filtro);
+    }
+
     public void cadastrar(EstudanteDTO estudanteDTO) throws BusinessException {
         validarCadastrar(estudanteDTO);
         cadastrarEstudanteNoBanco(estudanteDTO);
@@ -42,7 +49,7 @@ public class EstudanteBusiness {
         estudante.setEmail(estudanteDTO.getEmail());
         estudante.setDataNascimento(estudanteDTO.getDataNascimento());
 
-        Turma turma = estudanteRepository.find(Turma.class, estudanteDTO.getIdTurma());
+        Turma turma = estudanteRepository.find(Turma.class, estudanteDTO.getIdEstudante());
 
         if (turma == null) {
             throw new BusinessException("Turma não encontrada");
@@ -50,21 +57,21 @@ public class EstudanteBusiness {
 
         estudante.setTurma(turma);
 
-        enderecoBusiness.validarCadastrar(estudanteDTO.getEnderecoDTO());
+        enderecoBusiness.validarCadastrar(estudanteDTO.getEndereco());
         Endereco endereco = new Endereco();
-        endereco.setRua(estudanteDTO.getEnderecoDTO().getRua());
-        endereco.setNumero(estudanteDTO.getEnderecoDTO().getNumero());
-        endereco.setBairro(estudanteDTO.getEnderecoDTO().getBairro());
-        endereco.setCidade(estudanteDTO.getEnderecoDTO().getCidade());
-        endereco.setEstado(estudanteDTO.getEnderecoDTO().getEstado());
-        endereco.setPais(estudanteDTO.getEnderecoDTO().getPais());
+        endereco.setRua(estudanteDTO.getEndereco().getRua());
+        endereco.setNumero(estudanteDTO.getEndereco().getNumero());
+        endereco.setBairro(estudanteDTO.getEndereco().getBairro());
+        endereco.setCidade(estudanteDTO.getEndereco().getCidade());
+        endereco.setEstado(estudanteDTO.getEndereco().getEstado());
+        endereco.setPais(estudanteDTO.getEndereco().getPais());
         estudante.setEndereco(endereco);
 
         if (endereco.getIdEndereco() != null) {
             enderecoRepository.merge(endereco);
         } else {
             enderecoRepository.persist(endereco);
-            estudanteDTO.getEnderecoDTO().setIdEndereco(endereco.getIdEndereco());
+            estudanteDTO.getEndereco().setIdEndereco(endereco.getIdEndereco());
         }
 
         if (estudante.getIdEstudante() != null) {
@@ -86,12 +93,12 @@ public class EstudanteBusiness {
             erros.add("A data de nascimento é inválida.");
         }
 
-        if (estudanteDTO.getIdTurma() == null) {
-            erros.add("A turma é inválida blablabla.");
-        }
-
         if (StringUtils.isBlank(estudanteDTO.getEmail())) {
             erros.add("O e-mail do estudante é inválido.");
+        }
+
+        if(estudanteDTO.getTurma() == null){
+            erros.add("Turma inválida");
         }
 
         if (!erros.isEmpty()) {
@@ -105,5 +112,16 @@ public class EstudanteBusiness {
             throw new BusinessException("Estudante não encontrado através do ID " + idEstudante + ".");
         }
         return new EstudanteDTO(estudante);
+    }
+
+    private void validarCamposNulos(FiltroEstudanteDTO filtro) throws BusinessException {
+        if (filtro.getIdEstudante() == null
+                && StringUtils.isBlank(filtro.getNome())
+                && StringUtils.isBlank(filtro.getEmail())
+                && filtro.getDataNascimento() == null
+                && filtro.getTurma() == null
+                && filtro.getEscola() == null) {
+            throw new BusinessException("Insira ao menos um filtro para realizar a busca.");
+        }
     }
 }

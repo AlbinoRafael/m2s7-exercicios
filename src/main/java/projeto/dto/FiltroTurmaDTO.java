@@ -11,8 +11,8 @@ public class FiltroTurmaDTO implements Serializable {
 
     private String nome;
 
-
     private EstudanteDTO estudante;
+
     private EscolaDTO escola;
 
     private Date dataInicio;

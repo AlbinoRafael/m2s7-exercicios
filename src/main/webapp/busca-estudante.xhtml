@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:o="http://omnifaces.org/ui"
+      xml:lang="en"
+      lang="en">
+
+<h:head>
+    <title>Busca de Estudante</title>
+    <link rel="stylesheet" href="https://unpkg.com/primeflex@3.1.0/primeflex.css"/>
+</h:head>
+
+<h:body style="margin: 0 !important;">
+    <ui:include src="template/_navbar.xhtml"/>
+
+    <h:form id="buscaEstudante">
+        <p:messages id="messages" showDetail="true" showIcon="false" showSummary="false" closable="true">
+            <p:autoUpdate/>
+        </p:messages>
+
+        <p:fieldset id="filtros" legend="Filtros">
+            <p:outputLabel value="Matrícula: "/>
+            <p:inputNumber id="matriculaEstudante"
+                           decimalPlaces="0"
+                           decimalSeparator=""
+                           thousandSeparator=""
+                           value="#{buscaEstudanteWebBean.filtro.idEstudante}">
+                <p:ajax process="@this"/>
+            </p:inputNumber>
+
+            <p:outputLabel value="Nome: "/>
+            <p:inputText id="nomeEstudante" value="#{buscaEstudanteWebBean.filtro.nome}">
+                <p:ajax process="@this"/>
+            </p:inputText>
+
+            <p:outputLabel value="Email: "/>
+            <p:inputText id="emailEstudante" value="#{buscaEstudanteWebBean.filtro.email}">
+                <p:ajax process="@this"/>
+            </p:inputText>
+
+            <p:outputLabel value="Data Nascimento: "/>
+            <p:calendar id="dataNasc"
+                        pattern="dd/MM/yyyy"
+                        value="#{buscaEstudanteWebBean.filtro.dataNascimento}">
+                <p:ajax event="dateSelect" process="@this"/>
+                <p:ajax event="change" process="@this"/>
+                <p:ajax process="@this"/>
+            </p:calendar>
+
+            <p:outputLabel value="Turma: "/>
+            <p:autoComplete id="autocompleteTurma"
+                            minQueryLength="3"
+                            queryDelay="1000"
+                            emptyMessage="Nenhum turma encontrado"
+                            forceSelection="true"
+                            maxResults="15"
+                            cache="true"
+                            cacheTimeout="3000000"
+                            completeMethod="#{buscaEstudanteWebBean.consultarTurmasPorNome}"
+                            value="#{buscaEstudanteWebBean.filtro.turma}"
+                            var="turma"
+                            itemValue="#{turma}"
+                            itemLabel="#{turma.nome}">
+                <p:ajax event="itemSelect" process="@this" global="false"/>
+                <p:ajax event="clear" process="@this" global="false"/>
+                <o:converter converterId="omnifaces.ListIndexConverter" list="#{buscaEstudanteWebBean.turmasEncontradas}"/>
+            </p:autoComplete>
+
+            <p:outputLabel value="Escola: "/>
+            <p:autoComplete id="autocompleteEscola"
+                            minQueryLength="3"
+                            queryDelay="1000"
+                            emptyMessage="Nenhuma escola encontrada"
+                            forceSelection="true"
+                            maxResults="15"
+                            cache="true"
+                            cacheTimeout="3000000"
+                            completeMethod="#{buscaEstudanteWebBean.consultarEscolasPorNome}"
+                            value="#{buscaEstudanteWebBean.filtro.escola}"
+                            var="escola"
+                            itemValue="#{escola}"
+                            itemLabel="#{escola.nome}">
+                <p:ajax event="itemSelect" process="@this" global="false"/>
+                <p:ajax event="clear" process="@this" global="false"/>
+                <o:converter converterId="omnifaces.ListIndexConverter" list="#{buscaEstudanteWebBean.escolasEncontradas}"/>
+            </p:autoComplete>
+
+            <p:commandButton id="buscar"
+                             value="Buscar"
+                             process="@this"
+                             update="@form"
+                             action="#{buscaEstudanteWebBean.buscar()}"/>
+        </p:fieldset>
+
+        <p:fieldset id="estudantes" legend="estudantes"
+                    rendered="#{buscaEstudanteWebBean.buscaFeita}">
+            <p:dataTable id="turmasEncontradas"
+                         value="#{buscaEstudanteWebBean.estudantesEncontrados}"
+                         var="estudante"
+                         emptyMessage="Nenhum estudante encontrado.">
+                <p:column headerText="Ação">
+                    <p:link id="acessarEstudante"
+                            title="Acessar cadastro de estudante"
+                            target="_BLANK"
+                            href="http://localhost:8080/estudante.xhtml?idEstudante=#{estudante.idEstudante}">
+                        <em class="pi pi-external-link"/>
+                    </p:link>
+                </p:column>
+
+                <p:column headerText="Código">
+                    <h:outputText value="#{estudante.idEstudante}"/>
+                </p:column>
+
+                <p:column headerText="Nome">
+                    <h:outputText value="#{estudante.nome}"/>
+                </p:column>
+
+                <p:column headerText="Email">
+                    <h:outputText value="#{estudante.email}"/>
+                </p:column>
+
+                <p:column headerText="DT Nascimento">
+                    <h:outputText value="#{estudante.dataNascimento}">
+                        <f:convertDateTime pattern="dd/MM/yyyy"/>
+                    </h:outputText>
+                </p:column>
+
+                <p:column headerText="Turma">
+                    <h:outputText value="#{estudante.nomeTurma}"/>
+                </p:column>
+            </p:dataTable>
+        </p:fieldset>
+    </h:form>
+</h:body>
+</html>

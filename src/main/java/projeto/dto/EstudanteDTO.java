@@ -1,6 +1,8 @@
 package projeto.dto;
 
+import org.apache.commons.lang3.StringUtils;
 import projeto.entity.Estudante;
+
 
 import java.io.Serializable;
 import java.util.Date;
@@ -13,13 +15,17 @@ public class EstudanteDTO implements Serializable {
 
     private Long idTurma;
 
+    private String nomeTurma;
+
     private String nome;
 
     private String email;
 
     private Date dataNascimento;
 
-    private EnderecoDTO enderecoDTO = new EnderecoDTO();
+    private TurmaDTO turma;
+
+    private EnderecoDTO endereco = new EnderecoDTO();
     public EstudanteDTO() {
     }
 
@@ -28,13 +34,23 @@ public class EstudanteDTO implements Serializable {
         this.nome = nome;
     }
 
+    public EstudanteDTO(Estudante estudante, String nomeTurma){
+        this.idEstudante = estudante.getIdEstudante();
+        this.idTurma = estudante.getTurma() != null ? estudante.getTurma().getIdTurma() : null;
+        this.nome = estudante.getNome();
+        this.email = estudante.getEmail();
+        this.dataNascimento = estudante.getDataNascimento();
+        this.nomeTurma = !StringUtils.isBlank(nomeTurma) ? nomeTurma : "-";
+        this.endereco = new EnderecoDTO(estudante.getEndereco());
+    }
     public EstudanteDTO(Estudante estudante) {
         this.idEstudante = estudante.getIdEstudante();
         this.idTurma = estudante.getTurma() != null ? estudante.getTurma().getIdTurma() : null;
         this.nome = estudante.getNome();
         this.email = estudante.getEmail();
         this.dataNascimento = estudante.getDataNascimento();
-        this.enderecoDTO = new EnderecoDTO(estudante.getEndereco());
+        this.turma = estudante.getTurma() != null ? new TurmaDTO(estudante.getTurma(),false) : null;
+        this.endereco = new EnderecoDTO(estudante.getEndereco());
     }
 
     public Long getIdEstudante() {
@@ -51,6 +67,21 @@ public class EstudanteDTO implements Serializable {
 
     public void setIdTurma(Long idTurma) {
         this.idTurma = idTurma;
+    }
+
+    public String getNomeTurma() {
+        return nomeTurma;
+    }
+
+    public void setNomeTurma(String nomeTurma) {
+        this.nomeTurma = nomeTurma;
+    }
+    public TurmaDTO getTurma() {
+        return turma;
+    }
+
+    public void setTurma(TurmaDTO turma) {
+        this.turma = turma;
     }
 
     public String getNome() {
@@ -77,11 +108,11 @@ public class EstudanteDTO implements Serializable {
         this.dataNascimento = dataNascimento;
     }
 
-    public EnderecoDTO getEnderecoDTO() {
-        return enderecoDTO;
+    public EnderecoDTO getEndereco() {
+        return endereco;
     }
 
-    public void setEnderecoDTO(EnderecoDTO enderecoDTO) {
-        this.enderecoDTO = enderecoDTO;
+    public void setEndereco(EnderecoDTO endereco) {
+        this.endereco = endereco;
     }
 }

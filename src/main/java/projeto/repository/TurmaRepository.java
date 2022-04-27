@@ -11,6 +11,7 @@ import javax.persistence.Query;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("unchecked")
 public class TurmaRepository extends GenericRepository {
 
     public List<TurmaDTO> consultarTurmas() {
@@ -18,8 +19,18 @@ public class TurmaRepository extends GenericRepository {
                 .getResultList();
     }
 
+    public List<TurmaDTO> consultarTurmasPorNome(String query) {
+        query = "%"+query+"%";
+        query = query.toLowerCase();
+        return entityManager.createQuery("SELECT new projeto.dto.TurmaDTO(t.idTurma, t.nome) "
+                                +"FROM Turma t "
+                                +"WHERE LOWER(t.nome) LIKE :query", TurmaDTO.class)
+                                .setParameter("query", query)
+                                .getResultList();
+    }
+
     public List<TurmaDTO> consultarTurmasSemEscola() {
-        return entityManager.createQuery("SELECT new projeto.dto.TurmaDTO(t) "
+        return entityManager.createQuery("SELECT new projeto.dto.TurmaDTO(t, false) "
                         + "FROM Turma t "
                         + "WHERE t.escola is null ", TurmaDTO.class)
                 .getResultList();
@@ -70,11 +81,11 @@ public class TurmaRepository extends GenericRepository {
     }
 
     private String montarSqlBuscaTurma(FiltroTurmaDTO filtro) {
-        String hql = "SELECT new projeto.dto.TurmaDTO(t) " +
+        String hql = "SELECT new projeto.dto.TurmaDTO(t, false) " +
                 "FROM Turma t ";
         String andOrWhere = "WHERE ";
 
-        if (filtro.getEstudante().getIdEstudante() != null) {
+        if (filtro.getEstudante() != null) {
             hql = hql.concat("JOIN t.estudantes e ");
 
             hql = hql.concat(andOrWhere).concat("e.idEstudante = :idEstudante ");
@@ -107,4 +118,6 @@ public class TurmaRepository extends GenericRepository {
 
         return hql.concat("ORDER BY t.idTurma");
     }
+
+
 }

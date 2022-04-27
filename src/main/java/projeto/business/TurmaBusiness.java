@@ -103,7 +103,7 @@ public class TurmaBusiness {
             throw new BusinessException("Turma não encontrada através do ID " + idTurma + ".");
         }
 
-        return new TurmaDTO(turma);
+        return new TurmaDTO(turma, true);
     }
 
     public List<TurmaDTO> buscar(FiltroTurmaDTO filtro) throws BusinessException {

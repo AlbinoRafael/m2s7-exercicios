@@ -2,6 +2,9 @@ package projeto.service;
 
 import projeto.business.EstudanteBusiness;
 import projeto.dto.EstudanteDTO;
+import projeto.dto.FiltroEstudanteDTO;
+import projeto.dto.FiltroTurmaDTO;
+import projeto.dto.TurmaDTO;
 import projeto.exception.BusinessException;
 import projeto.repository.EstudanteRepository;
 
@@ -18,6 +21,10 @@ public class EstudanteService {
     @Inject
     private EstudanteRepository estudanteRepository;
 
+
+    public List<EstudanteDTO> buscar(FiltroEstudanteDTO filtro) throws BusinessException {
+        return estudanteBusiness.buscar(filtro);
+    }
     public void cadastrar(EstudanteDTO estudanteDTO) throws BusinessException {
         estudanteBusiness.cadastrar(estudanteDTO);
     }
